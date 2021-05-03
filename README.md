@@ -1,1 +1,49 @@
 # Python-opencv-Face-Recognization-
+Face recognition with opencv-python.
+
+# Prepare Required Files
+opencv-python
+
+OpenCV with Python 3 interface
+
+sudo apt-get update && sudo apt-get upgrade
+sudo apt-get install python3-opencv python3-picamera python3-numpy python3-pil
+DB Browser for SQLite
+
+This software is used for browsing user data stored in SQLite database file.
+
+sudo apt-get install sqlitebrowser
+Classifiers file: haarcascade_frontalface_default.xml
+
+This is a pre-trained cascade classifier file for face detection provided by OpenCV. You may download the file in OpenCV's GitHub and store it in the project root (same directory of setup.py).
+
+# Usage
+Before using any program, please run the setup.py script to initialize an empty SQLite database for storing user information.
+
+cd opencv_facerecognition
+python3 setup.py
+First we have to collect face images using recordface_***.py script.
+
+python3 recordface_webcam.py # for using webcam
+python3 recordface_picam.py # for using PiCam v2
+Collected face images will be stored in dataset directory grouped by User ID. User's name and User ID will stored in SQLite database. You may add more fields in the database to store more information about the target person you have gathered by other methods.
+
+You may collected as many face images of different person as you wanted and train them at once.
+
+To train a face recognition model, run the trainer.py script.
+
+python3 trainer.py
+The trained recognition model will be stored in recognizer directory, and we can run detector_***.py script to begin face recognition.
+
+python3 detector_webcam.py # for using webcam
+python3 detector_picam.py # for using PiCam v2
+When the program detected a face, it will retrieve user information from SQLite database, and show target person's name in video window.
+
+# Multi-threading Detection
+Because face recognition using IP cam (via RTSP) consume a lot of computer power, we can only recognize face 5 times per second with Raspberry Pi 4 (4GB) with single threading. We may release more computer power of Raspberry Pi by writing the code in multi-threading manner.
+
+Codes in threading directory is multi-threading version of detector script, which is for webcam or IP cam.
+
+cd threading
+python3 detect_main.py
+NB: The Show module in Show.py is used only for evaluating simple video capture in multi-threading manner.
